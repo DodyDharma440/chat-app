@@ -4,6 +4,8 @@ import { ChatEngine } from "react-chat-engine";
 import "./App.css";
 
 const App = () => {
+  console.log('test')
+
   return (
     <ChatEngine
       height="100vh"
