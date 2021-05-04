@@ -5,6 +5,8 @@ import { ChatFeed } from "./components";
 import "./App.css";
 
 const App = () => {
+  console.log('test')
+
   return (
     <ChatEngine
       height="100vh"
