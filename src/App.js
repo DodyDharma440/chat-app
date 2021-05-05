@@ -5,7 +5,7 @@ import { ChatFeed } from "./components";
 import "./App.css";
 
 const App = () => {
-  console.log('test')
+  console.log("test");
 
   return (
     <ChatEngine
