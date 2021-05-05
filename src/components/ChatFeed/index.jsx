@@ -1,7 +1,8 @@
 import React from "react";
-import MessageForm from "./MessageForm";
-import MyMessage from "./MyMessage";
-import TheirMessage from "./TheirMessage";
+import MessageForm from "../MessageForm";
+import MyMessage from "../MyMessage";
+import TheirMessage from "../TheirMessage";
+import classnames from "classnames";
 
 const ChatFeed = (props) => {
   const { chats, activeChat, userName, messages } = props;
@@ -9,14 +10,21 @@ const ChatFeed = (props) => {
   const chat = chats && chats[activeChat];
 
   const renderReadReceipts = (message, isMyMessage) => {
+    const readReceiptClass = classnames(
+      "w-3 h-3 rounded-full m-1 bg-no-repeat bg-center bg-cover",
+      {
+        "float-right": isMyMessage,
+        "float-left": !isMyMessage,
+      }
+    );
+
     return chat.people.map(
       (person, index) =>
         person.last_read === message.id && (
           <div
             key={index}
-            className="read-receipt"
+            className={readReceiptClass}
             style={{
-              float: isMyMessage ? "right" : "left",
               backgroundImage: `url(${person?.person?.avatar})`,
             }}
           />
@@ -32,9 +40,14 @@ const ChatFeed = (props) => {
       const lastMessageKey = index === 0 ? null : keys[index - 1];
       const isMyMessage = userName === message.sender.username;
 
+      const readReceiptsClass = classnames("relative bottom-1", {
+        "mr-4 ml-0": isMyMessage,
+        "mr-0 ml-16": !isMyMessage,
+      });
+
       return (
         <div key={index} style={{ width: "100%" }}>
-          <div className="message-block">
+          <div className="w-full inline-block">
             {isMyMessage ? (
               <MyMessage message={message} />
             ) : (
@@ -44,13 +57,7 @@ const ChatFeed = (props) => {
               />
             )}
           </div>
-          <div
-            className="read-receipts"
-            style={{
-              marginRight: isMyMessage ? "18px" : 0,
-              marginLeft: isMyMessage ? 0 : "68px",
-            }}
-          >
+          <div className={readReceiptsClass}>
             {renderReadReceipts(message, isMyMessage)}
           </div>
         </div>
@@ -61,16 +68,16 @@ const ChatFeed = (props) => {
   if (!chat) return "Loading....";
 
   return (
-    <div className="chat-feed">
-      <div className="chat-title-container">
-        <div className="chat-title">{chat.title}</div>
-        <div className="chat-subtitle">
+    <div className="h-full w-full overflow-x-hidden overflow-y-scroll bg-gray-100">
+      <div className="text-center pt-4 pb-8">
+        <div className="font-bold text-2xl text-purple-700">{chat.title}</div>
+        <div className="font-semibold text-xs pt-1 text-purple-800">
           {chat.people.map((person) => ` ${person.person.username} `)}
         </div>
       </div>
       {renderMessages()}
       <div style={{ height: "100px" }} />
-      <div className="message-form-container">
+      <div className="absolute bottom-0 p-5 w-full overflow-x-hidden bg-gray-200">
         <MessageForm {...props} chatId={activeChat} />
       </div>
     </div>
